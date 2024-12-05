@@ -28,19 +28,22 @@ const App = () => {
       <SearchBar filters={filters} setFilters={setFilters} />
 
    
-      {filteredJobs.length > 0 ? (
-        filteredJobs.map((job) => (
-          <JobCards
-            key={job.id}
-            title={job.title}
-            company={job.company}
-            location={job.location}
-            description={job.description} 
-          />
-        ))
-      ) : (
-        <p>No jobs found</p>
-      )}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-6">
+        {filteredJobs.length > 0 ? (
+          filteredJobs.map((job) => (
+            <JobCards
+              key={job.id}
+              title={job.title}
+              company={job.company}
+              location={job.location}
+              description={job.description} 
+            />
+          ))
+        ) : (
+          <p>No jobs found</p>
+        )}
+      </div>
+
 
 
     </>
