@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./Components/Header";
+import SearchBar from "./Components/SearchBar";
+import JobCards from "./Components/JobCards";
+import { mockJobs } from "./Data/Jobs";
 
-function App() {
+const App = () => {
+  const [filters, setFilters] = useState({ keyword: "", location: "" });
+  const [isSavedJobsOnly, setIsSavedJobsOnly] = useState(false);
+  const filteredJobs = mockJobs
+    .filter(
+      (job) =>
+        job.title.toLowerCase().includes(filters.keyword.toLowerCase()) &&
+        job.location.toLowerCase().includes(filters.location.toLowerCase()) &&
+        (!isSavedJobsOnly || job.isSaved)
+    )
+    .map((job) => ({
+      id: job.id, 
+      title: job.title,
+      company: job.company,
+      location: job.location,
+      description: job.description,
+    }));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header toggleSavedJobs={() => setIsSavedJobsOnly(!isSavedJobsOnly)} isSavedJobsOnly={isSavedJobsOnly} />
+      <SearchBar filters={filters} setFilters={setFilters} />
+
+   
+      {filteredJobs.length > 0 ? (
+        filteredJobs.map((job) => (
+          <JobCards
+            key={job.id}
+            title={job.title}
+            company={job.company}
+            location={job.location}
+            description={job.description} 
+          />
+        ))
+      ) : (
+        <p>No jobs found</p>
+      )}
+
+
+    </>
   );
-}
+};
 
 export default App;
